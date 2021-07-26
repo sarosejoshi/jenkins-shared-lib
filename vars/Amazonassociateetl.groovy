@@ -11,7 +11,6 @@ pipeline {
     gpg_secret = credentials("saroj_gpg_etl_keys")
     gpg_passphrase = credentials("saroj_gpg_etl_keys_pass")
  }
-  stages {
     
 stages {
     stage("Master") {
