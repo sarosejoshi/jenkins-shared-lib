@@ -56,7 +56,9 @@ stages {
         script{
           sh '''
                
-                
+              git submodule update --init --recursive 
+               git submodule foreach --recursive git fetch 
+               git submodule foreach git pull --ff-only origin master
                cd config/
                gpg --batch --import $gpg_secret
                
@@ -67,27 +69,7 @@ stages {
         }
       }
     }
-    stage('Decrypt a develop secret file')
-    {
-      when {
-        branch 'develop'
-      }
-      steps{
-        
-        script{
-          sh '''
-               
-                
-               cd config/
-               gpg --batch --import $gpg_secret
-               
-                git secret reveal -p $gpg_passphrase
-                '''
-                
-          
-        }
-      }
-    }
+    
     stage('Decrypt a test secret file')
     {
       when{
@@ -98,7 +80,8 @@ stages {
         script{
           sh '''
                
-                
+               git submodule update --init --recursive
+
                cd config/
                gpg --batch --import $gpg_secret
                
@@ -232,22 +215,30 @@ stages {
       }
     }
 
-    stage('Copy json file to container'){
+    stage('Deploy Airflow'){
+      when {
+        branch 'master'
+        // changeset "amazon-associate-etl/dag/**"
+      }
+
       steps {
+
         script {
           
-          sh '''
+          
+            sh '''
+               cd config/amazon-associate-etl/dag/
+               sed -i 's/\"image_tag\":.*/\"image_tag\": "latest1"/g' "adsbrain_feed_etl_config.json"
+               scp -o StrictHostKeyChecking=no config/common/airflow/amazon_associate_etl_config.json ansible@ansible1.data.int.dc1.ad.net:/home/ansible/airflow/dags
+               ssh -o StrictHostKeyChecking=no ansible@ansible1.data.int.dc1.ad.net docker exec -i eeb82e397165 airflow variables import /opt/airflow/dags/amazon_associate_etl_config.json
+               ssh -o StrictHostKeyChecking=no ansible@ansible1.data.int.dc1.ad.net docker exec -i eeb82e397165 airflow variables get amazon_associate_etl_config
+                 '''
+
+                 sh '''
           cd amazon-associate-etl/dag/
           docker cp amazon_associate_etl.py eeb82e397165:/opt/airflow/dags
 
           '''
-            sh '''
-               cd config
-                docker cp common/airflow/amazon_associate_etl_config.json eeb82e397165:/opt/airflow/dags
-                docker exec -i eeb82e397165 airflow variables import /opt/airflow/dags/amazon_associate_etl_config.json
-                docker exec -i eeb82e397165 airflow variables get amazon_associate_etl_config
-
-                 '''
         }
       }
     }
