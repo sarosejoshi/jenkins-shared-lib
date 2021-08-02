@@ -226,8 +226,8 @@ stages {
           
           
             sh '''
-               cd config/amazon-associate-etl/dag/
-               sed -i 's/\"image_tag\":.*/\"image_tag\": "latest1"/g' "adsbrain_feed_etl_config.json"
+               cd config/
+               sed -i 's/\"image_tag\":.*/\"image_tag\": "latest1"/g' "common/airflow/adsbrain_feed_etl_config.json"
                scp -o StrictHostKeyChecking=no config/common/airflow/amazon_associate_etl_config.json ansible@ansible1.data.int.dc1.ad.net:/home/ansible/airflow/dags
                ssh -o StrictHostKeyChecking=no ansible@ansible1.data.int.dc1.ad.net docker exec -i eeb82e397165 airflow variables import /opt/airflow/dags/amazon_associate_etl_config.json
                ssh -o StrictHostKeyChecking=no ansible@ansible1.data.int.dc1.ad.net docker exec -i eeb82e397165 airflow variables get amazon_associate_etl_config
