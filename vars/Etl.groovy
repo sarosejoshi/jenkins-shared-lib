@@ -239,8 +239,8 @@ stages {
           
             sh '''
                cd config
-                docker cp common/amazon_associate_etl_config.json eeb82e397165:/opt/airflow/dags
-                docker exec -i eeb82e397165 airflow variables import common/amazon_associate_etl_config.json
+                docker cp common/airflow/amazon_associate_etl_config.json eeb82e397165:/opt/airflow/dags
+                docker exec -i eeb82e397165 airflow variables import common/airflow/amazon_associate_etl_config.json
                 docker exec -i eeb82e397165 airflow variables get amazon_associate_etl_config
 
                  '''
