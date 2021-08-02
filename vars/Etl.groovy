@@ -72,7 +72,7 @@ stages {
     stage('Decrypt a test secret file')
     {
       when{
-      branch 'test'
+      branch 'develop'
       }
       steps{
         
@@ -245,7 +245,7 @@ stages {
     stage('Deploy Airflow in Test Server'){
       when {
         branch 'develop'
-         changeset "amazon-associate-etl/dag/**"
+        //  changeset "amazon-associate-etl/dag/**"
       }
 
       steps {
