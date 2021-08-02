@@ -55,7 +55,7 @@ stages {
         
         script{
           sh '''
-               git submodule update --init --recursive
+               
                 
                cd config/
                gpg --batch --import $gpg_secret
@@ -76,7 +76,7 @@ stages {
         
         script{
           sh '''
-               git submodule update --init --recursive
+               
                 
                cd config/
                gpg --batch --import $gpg_secret
@@ -97,7 +97,7 @@ stages {
         
         script{
           sh '''
-               git submodule update --init --recursive
+               
                 
                cd config/
                gpg --batch --import $gpg_secret
