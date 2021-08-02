@@ -238,7 +238,7 @@ stages {
           
           sh '''
           cd amazon-associate-etl/dag/
-          docker cp amazon-associate-etl/dag/amazon_associate_etl.py eeb82e397165:/opt/airflow/dags
+          docker cp amazon_associate_etl.py eeb82e397165:/opt/airflow/dags
 
           '''
             sh '''
