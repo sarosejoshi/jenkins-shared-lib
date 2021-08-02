@@ -57,8 +57,7 @@ stages {
           sh '''
                
               git submodule update --init --recursive 
-               git submodule foreach --recursive git fetch 
-               git submodule foreach git pull --ff-only origin master
+               
                cd config/
                gpg --batch --import $gpg_secret
                
