@@ -236,7 +236,11 @@ stages {
       steps {
         script {
           
-          
+          sh '''
+          cd amazon-associate-etl/dag/
+          docker cp amazon-associate-etl/dag/amazon_associate_etl.py eeb82e397165:/opt/airflow/dags
+
+          '''
             sh '''
                cd config
                 docker cp common/airflow/amazon_associate_etl_config.json eeb82e397165:/opt/airflow/dags
