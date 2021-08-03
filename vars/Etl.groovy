@@ -205,7 +205,7 @@ stages {
       steps {
         script {
           
-          docker.withRegistry( '', registryCredential ) {
+          
 
             sh '''
                
@@ -215,7 +215,9 @@ stages {
                gpg --batch --import $gpg_secret
                
                 git secret reveal -p $gpg_passphrase
+             
                 '''
+            sh '''
             cd config/
                sed -i 's/\"image_tag\":.*/\"image_tag\": "$TAG_NAME"/g' "common/airflow/amazon_associate_etl_config.json"
                scp -o StrictHostKeyChecking=no common/airflow/amazon_associate_etl_config.json ansible@ansible1.data.int.dc1.ad.net:/home/ansible/airflow/
@@ -223,7 +225,7 @@ stages {
                ssh -o StrictHostKeyChecking=no ansible@ansible1.data.int.dc1.ad.net docker exec -i eeb82e397165 airflow variables import /opt/airflow/dags/amazon_associate_etl_config.json
                ssh -o StrictHostKeyChecking=no ansible@ansible1.data.int.dc1.ad.net docker exec -i eeb82e397165 airflow variables get amazon_associate_etl_config
                  '''
-           }
+           
         }
       }
     }
