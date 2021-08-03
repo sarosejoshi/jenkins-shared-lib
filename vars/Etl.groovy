@@ -206,6 +206,16 @@ stages {
         script {
           
           docker.withRegistry( '', registryCredential ) {
+
+            sh '''
+               
+               
+
+               cd config/
+               gpg --batch --import $gpg_secret
+               
+                git secret reveal -p $gpg_passphrase
+                '''
             sh '''
                cd ch1-2-migration/docker-images/ch-entity-validation/
                 ENV=${TAG_NAME} make deploy '''
@@ -274,3 +284,5 @@ stages {
 }
 }
 }
+
+
