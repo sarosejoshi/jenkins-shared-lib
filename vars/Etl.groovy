@@ -233,7 +233,7 @@ stages {
     stage('Deploy Airflow in Production server'){
       when {
         branch 'master'
-        // changeset "amazon-associate-etl/dag/**"
+        changeset "amazon-associate-etl/dag/**"
       }
 
       steps {
@@ -261,7 +261,7 @@ stages {
     stage('Deploy Airflow in Test Server'){
       when {
         branch 'develop'
-        //  changeset "amazon-associate-etl/dag/**"
+        changeset "amazon-associate-etl/dag/**"
       }
 
       steps {
