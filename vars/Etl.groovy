@@ -254,11 +254,37 @@ stages {
 
                  sh '''
           cd amazon-associate-etl/dag/
-          docker cp amazon_associate_etl.py eeb82e397165:/opt/airflow/dags
+          scp -o StrictHostKeyChecking=no amazon_associate_etl.py ansible@ansible1.data.int.dc1.ad.net:/home/ansible/airflow/
+          ssh -o StrictHostKeyChecking=no ansible@ansible1.data.int.dc1.ad.net docker cp /home/ansible/airflow/amazon_associate_etl.py eeb82e397165:/opt/airflow/dags
+          
 
           '''
         }
       }
+    }
+    stage('DAG CHECK')
+    {
+       when {
+        branch 'develop'
+        changeset "amazon-associate-etl/dag/**"
+      }
+
+      steps {
+
+        script {
+          
+          
+       
+
+          sh '''
+          cd amazon-associate-etl/dag/
+          scp -o StrictHostKeyChecking=no amazon_associate_etl.py ansible@ansible1.data.int.dc1.ad.net:/home/ansible/airflow/
+          ssh -o StrictHostKeyChecking=no ansible@ansible1.data.int.dc1.ad.net docker cp /home/ansible/airflow/amazon_associate_etl.py eeb82e397165:/opt/airflow/dags
+          ssh -o StrictHostKeyChecking=no ansible@ansible1.data.int.dc1.ad.net docker exec -i eeb82e397165 airflow dags state my_dag 2021-07-30
+
+          '''
+        }
+      } 
     }
     stage('Deploy Airflow in Test Server'){
       when {
